@@ -42,9 +42,9 @@ ${0}:unbind() {
       builtin bindkey -M "$1" -r "$2"
 }
 
-${0}:bind main    up-line-or-search $_autocomplete__key_up[@]
+#${0}:bind main    up-line-or-search $_autocomplete__key_up[@]
 ${0}:bind-menu    up-history        $_autocomplete__key_up[@]
-${0}:bind main  down-line-or-select $_autocomplete__key_down[@]
+#${0}:bind main  down-line-or-select $_autocomplete__key_down[@]
 ${0}:bind-menu  down-history        $_autocomplete__key_down[@]
 
 ${0}:rebind emacs   up-line-or-{history,search} '^P'
