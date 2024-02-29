@@ -55,14 +55,14 @@ _autocomplete__history_lines() {
   local -aU displays=( "${(f)output}" )
   local -P numpat='[[:blank:]]#(<->)[*[:blank:]][[:blank:]]'
 
-  local -P groups="${(l:$(( 2 * $#words[CURRENT] ))::=0:):-}"
-  _comp_colors=(
-      "=(#b)${numpat}${lbuffer}(${query})${rbuffer}${rbuffer:+[[:blank:]]#}=2=2=0=0=30;103$groups"
-      "=(#b)${numpat}${lbuffer}(${query})*=2=2=0=30;103$groups"
-      "=(#b)${numpat}${lbuffer}(*)=2=2=0"
-      "=(#b)${numpat}*=0=2"
-      ${(M)_comp_colors:#ma=*}
-  )
+  # local -P groups="${(l:$(( 2 * $#words[CURRENT] ))::=0:):-}"
+  # _comp_colors=(
+  #     "=(#b)${numpat}${lbuffer}(${query})${rbuffer}${rbuffer:+[[:blank:]]#}=2=2=0=0=30;103$groups"
+  #     "=(#b)${numpat}${lbuffer}(${query})*=2=2=0=30;103$groups"
+  #     "=(#b)${numpat}${lbuffer}(*)=2=2=0"
+  #     "=(#b)${numpat}*=0=2"
+  #     ${(M)_comp_colors:#ma=*}
+  # )
 
   local -Pi excess= index= max= list_lines=
     if (( is_incremental )); then
