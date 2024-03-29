@@ -1,29 +1,45 @@
 #!/bin/zsh
+# 这是一个 zsh shell 脚本，用于自动补全最近访问过的目录。让我们逐行解释这个脚本：
+# 加载 zsh 模块，例如 zsh/files 和 zsh/parameter
 zmodload -Fa zsh/files b:zf_mv b:zf_mkdir
 zmodload -F zsh/parameter p:commands p:dirstack p:functions
 
+# 定义一个名为 precmd 的函数，它在每次命令执行之前被调用
 ${0}:precmd() {
+# 检查 functions 数组中是否已经有一个名为 +autocomplete:recent-directories 的函数。如果没有，继续执行以下代码
   if [[ ! -v functions[+autocomplete:recent-directories] ]]; then
+      # 设置全局 shell 选项 autopushd 和 pushdignoredups，以便在改变目录时自动更新目录堆栈
     setopt autopushd pushdignoredups  # Set *global* shell options.
+    # 使用 autoload 命令加载 chpwd_recent_filehandler 函数
     builtin autoload -RUz chpwd_recent_filehandler
 
+    # 定义并设置 zstyle 配置项 recent-dirs-file 和 recent-dirs-max。这些配置项分别用于指定存储最近访问目录的文件路径和最大保存目录数量
     local __=''
     builtin zstyle -s :chpwd: recent-dirs-file __ ||
         builtin zstyle ':chpwd:*' recent-dirs-file ${XDG_DATA_HOME:-$HOME/.local/share}/zsh/chpwd-recent-dirs
     builtin zstyle -s :chpwd: recent-dirs-max __ ||
         builtin zstyle ':chpwd:*' recent-dirs-max 0
 
+    # 如果 dirstack 数组为空，从 chpwd_recent_filehandler 函数获取最近访问的目录列表，并将其存储在 dirstack 数组中。
     if ! (( $#dirstack[@] )); then
       local -aU reply=()
       chpwd_recent_filehandler
       dirstack=( ${^reply[@]:#$PWD}(N-/) )
     fi
 
+    # 定义一个名为 +autocomplete:recent-directories:save 的函数，用于在改变目录时将当前目录和目录堆栈中的目录保存到最近访问目录文件
     +autocomplete:recent-directories:save() {
       chpwd_recent_filehandler $PWD $dirstack[@]
     }
+    # 使用 add-zsh-hook 命令将 +autocomplete:recent-directories:save 函数添加为 chpwd 钩子，以便在改变目录时自动调用该函数
     add-zsh-hook chpwd +autocomplete:recent-directories:save
 
+    # 定义一个名为 +autocomplete:recent-directories 的函数，
+    # 用于在自动补全时过滤并返回最近访问过的目录列表。
+    # 这个函数首先从 dirstack 数组中过滤掉当前目录、其子目录以及不存在的目录。
+    # 然后，它将符合条件的目录列表存储在 reply 数组中，
+    # 并根据用户输入的前缀和后缀进行排序。
+    # 最后，它检查 reply 数组的长度并返回相应的值
     +autocomplete:recent-directories() {
       # Don't complete current dir, its children, or nonexistent ones.
       typeset -ga reply=( ${^dirstack[@]:#$PWD(|/[^/]#)}(N) )
@@ -36,3 +52,6 @@ ${0}:precmd() {
     }
   fi
 }
+
+# 这个脚本的主要目的是在 zsh shell 中自动补全最近访问过的目录。它通过在改变目录时更新目录堆栈、保存最近访问的目录列表并在自动补全时提供这些目录来实现这个功能。
+

@@ -16,7 +16,7 @@ features.
 
 ### Optimized completion config
 Zsh's completion system is powerful, but hard to configure.  So, let
-Autocomplete [do it for you](Functions/Init/.autocomplete:config), while providing a
+Autocomplete [do it for you](Functions/Init/.autocomplete__config), while providing a
 manageable list of [configuration settings](#configuration) for changing the
 defaults.
 
@@ -57,7 +57,7 @@ instead.
 | `main` | `emacs` | `vicmd` | `viins` | Action
 | -----: | ------: | ------: | ------: | -----:
 | | <kbd>Tab</kbd> | | <kbd>Tab</kbd> | Insert top completion
-| <kbd>Shift</kbd><kbd>Tab</kbd> | | | | Insert substring occuring in all listed completions
+| <kbd>Shift</kbd><kbd>Tab</kbd> | | | | Insert substring occurring in all listed completions
 | <kbd>↑</kbd> | <kbd>Ctrl</kbd><kbd>P</kbd> | <kbd>K</kbd> | |  Cursor up _-or-_ [History menu](#history-menu)
 | <kbd>↓</kbd> | <kbd>Ctrl</kbd><kbd>N</kbd> | <kbd>J</kbd> | | Cursor down _-or-_ Completion menu
 | <kbd>Alt</kbd><kbd>↑</kbd> | <kbd>Alt</kbd><kbd>P</kbd> | <kbd>Shift</kbd><kbd>N</kbd> | | History menu (always)
@@ -251,6 +251,12 @@ This will make Autocomplete behave as if you pressed <kbd>Ctrl</kbd><kbd>R</kbd>
 zstyle ':autocomplete:*' default-context history-incremental-search-backward
 ```
 
+### Wait for a minimum amount of input
+To suppress autocompletion until a minimum number of characters have been typed:
+```zsh
+zstyle ':autocomplete:*' min-input 3
+```
+
 ### Wait with autocompletion until typing stops for a certain amount of seconds
 Normally, Autocomplete fetches completions after you stop typing for about 0.05 seconds. You can change this as follows:
 ```zsh
@@ -258,14 +264,14 @@ zstyle ':autocomplete:*' delay 0.1  # seconds (float)
 ```
 
 ### Don't show completions if the current word matches a pattern
-For example, this will stop completions from showing whenver the current word consists of two or more dots:
+For example, this will stop completions from showing whenever the current word consists of two or more dots:
 ```zsh
 zstyle ':autocomplete:*' ignored-input '..##'
 ```
 
 ## Limit the number of lines shown
-By default, Autocomplete let the history menu fill half of the screen, and limits autocompletion and history search
-to maximum of 16 lines.  You can change these limits as follows:
+By default, Autocomplete lets the history menu fill half of the screen, and limits autocompletion and history search
+to a maximum of 16 lines.  You can change these limits as follows:
 
 ```zsh
 # Autocompletion
